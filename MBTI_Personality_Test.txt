@@ -1,0 +1,178 @@
+import random
+
+acronym = {"E": "Extroverted", "I": "Introverted", "N": "Intuition", "S": "Sensing", "F": "Feeling", "T": "Thinking", "J": "Judging", "P": "Perceiving"}
+letters = [["E", "I"], ["N", "S"], ["F", "T"], ["J", "P"]]
+letter_decs = [["Extraverts love throwing themselves into their many passions. They like to explore every new topic that comes their way, constantly hopping from one thing to another. They love being surrounded by people, and then to have a wide circle of friends.", "Introverts prefer to deeply focus on one or two passions at a time rather than skimming the surface of things they find interesting. They prefer meaningful friendships to having a big group of friends, and they need time alone to recharge after too much stimulation."], ["Intuitive types view the world through a more abstract lens than other types. They tend to have their heads in the clouds, always thinking about the way things could be or how everything works together. They have a complex inner world that can be difficult to share with others.", "Sensors are very grounded and practical. They take in their surroundings and come up with realistic solutions to complex problems. They are focused and stay in the moment."], ["Feelers tend to make decisions keeping everyone involved in mind. They work towards each person's best interests to make a decision that benefits the group as a whole.", "Thinkers like to make decisions based on logical reasoning. They are excellent at coming up with solutions that solve complicated practical situations."], ["Judging (not the same definition as judgmental) types are organized and structured. They like to have a plan and stick to their goals. Once they commit to something, they stay with it until it's completed. They are orderly and efficient.", "Perceiving types like to explore every option available to them. They are open to new ideas and are flexible enough to completely change course on a decision. They can be procrastinators, but the impending deadline helps them focus."]]
+
+functions = {"J": ["F", "T"], "P": ["N", "S"]}
+func_stack = [["Dominant", "This is your most prominent quality, the one you use more than any of the others."], ["Auxiliary", 'This is your "helping function." It is your second most used quality, and it helps support your dominant function.'], ["Tertiary", "You use this function far less often than your first two, but it is still important. It's your backup plan when your usual style doesn't work."], ["Inferior", "You hardly ever use this function. It can be a struggle for you, as it is your biggest weakness. It's still used occasionally, just not as often as the others."]]
+cog_funcs = {"Fe": "Extraverted Feeling is the care for harmony, balance, and unity within a group. It values the feelings of others and the overall contentment in a situation. It allows for connections and brings people together.", "Fi": "Introverted Feeling connects to values. It allows you to make decisions that align with your beliefs and morals.", "Ne": "Extraverted Intuition takes in all of the patterns in the world around you. It helps come up with many abstract ideas and solutions to solve problems.", "Ni": "Introverted Intuition looks further and understand things based on patterns and predictions at a very deep level. It simplifies the world down into sets of formulas to figure things out.", "Se": "Extraverted Sensing is the connection with the physical reality and the real world. It enjoys trying new sensory experiences and material luxury. It's good at interpreting how different objects can work together in different ways.", "Si": "Introverted Sensing uses what it's learned from previous experiences to solve problems.", "Te": 'Extraverted Thinking likes to work through problems logically step-by-step. They tend to "think out loud" and work with others to find a sollution.', "Ti": 'Introverted Thinking innately thinks logically and can puzzle out the world around them. They tend to have a "number sense" and are proficient at figuring things out by abstracting them into numbers and ideas.'}
+
+sec_descs = [["Social Styles", "This section focuses on how you deal with people and social situations. To a lesser extent, it also has to do with how you tackle life and new information."], ["Acquiring Information", "This section is about how you collect and use information. It refers to how you see the world around you."], ["Making Decisions", "This section is about the steps you take and your focus when making decisions. It's not necessarily how you act all the time, just when making a choice."], ["Approach to Outside World", "This section asks about how you appear on the outside. This is how you act outwardly and how the world sees you. It doesn't have to be how you feel inwardly; it's how you act most of the time."]]
+
+soc_styles = [["large groups", "1:1 interaction"], ["think out loud", "think before speaking"], ["circle of friends", "one very close friend"], ["energized by people", "energized by alone time"], ["center of attention", "blend in with the crowd"], ["broad experience", "deep experience"], ["group work", "independent work"], ["multi-task", "focus on one thing at a time"], ["initiate", "encourage"]]
+acq_info = [["possibilities", "facts"], ["conceptual", "practical"], ["idealistic", "realistic"], ["find patterns and impressions", "accept things as they are"], ["abstract", "literal"], ["future-oriented", "focused on past and present"], ["visionary", "down–to-earth"], ["big picture", "little details"], ["daydream", "action"]]
+making_dcs = [["tactful", "truthful"], ["collaboration", "pros and cons"], ["values", "principles"], ["compassionate", "consistent"], ["caring", "fairness"], ["people-oriented", "task-oriented"], ["interpersonal harmony", "logic"], ["relationships", "science"], ["heart", "head"]]
+ap_out_wrld = [["structured", "flexible"], ["decision-making", "information-gathering"], ["steady goals", "bursts of energy"], ["to-do lists", "openness"], ["work, then play", "mix work and play"], ["miss new information", "always finding more options"], ["plan for everything", "go with the flow"], ["guidelines", "looseness"], ["absorbed in work", "inquisitive"]]
+
+sec_qs = [soc_styles, acq_info, making_dcs, ap_out_wrld]
+
+def question(sec, num, prefs):
+    disp_num = (num + 1) + (sec * 9)
+    if disp_num < 10:
+        disp_num = str(disp_num) + ".  "
+    else:
+        disp_num = str(disp_num) + ". "
+    pair = [sec_qs[sec][num][random.randint(0, 1)], ""]
+    if pair[0] == sec_qs[sec][num][0]:
+        pair[1] = sec_qs[sec][num][1]
+    else:
+        pair[1] = sec_qs[sec][num][0]
+    while True:
+        try:
+            choice = int(input("\n" + disp_num + "Which is your preference/best fit?\n    1. " + pair[0] + "\n    2. " + pair[1] + "\n    Answer: "))
+            if choice == 1 or choice == 2:
+                break
+            else:
+                print("You must enter a number, either 1 or 2.")
+        except:
+            print("You must enter a number, either 1 or 2.")
+    prefs[sec][sec_qs[sec][num].index(pair[choice - 1])] = prefs[sec][sec_qs[sec][num].index(pair[choice - 1])] + 1
+    return prefs
+
+def exec_section(sec_num, prefs):
+    print("-------------------------------------------")
+    print("\nSection " + str(sec_num + 1) + ": " + sec_descs[sec_num][0])
+    print("   " + sec_descs[sec_num][1])
+    for i in range(9):
+        prefs = question(sec_num, i, prefs)
+    return prefs
+
+def function_stack(results):
+    func = ["", "", "", ""]
+    if results[3] == "J":
+        if results[0] == "E":
+            fir = results[2]
+            sec = results[1]
+            if fir == functions["J"][0]:
+                inf = functions["J"][1]
+            else:
+                inf = functions["J"][0]
+            if sec == functions["P"][0]:
+                ish = functions["P"][1]
+            else:
+                ish = functions["P"][0]
+            func = [fir + "e", sec + "i", ish + "e", inf + "i"]
+        else:
+            fir = results[1]
+            sec = results[2]
+            if fir == functions["P"][0]:
+                inf = functions["P"][1]
+            else:
+                inf = functions["P"][0]
+            if sec == functions["J"][0]:
+                ish = functions["J"][1]
+            else:
+                ish = functions["J"][0]
+            func = [fir + "i", sec + "e", ish + "i", inf + "e"]
+    else:
+        if results[0] == "E":
+            fir = results[1]
+            sec = results[2]
+            if fir == functions["P"][0]:
+                inf = functions["P"][1]
+            else:
+                inf = functions["P"][0]
+            if sec == functions["J"][0]:
+                ish = functions["J"][1]
+            else:
+                ish = functions["J"][0]
+            func = [fir + "e", sec + "i", ish + "e", inf + "i"]
+        else:
+            fir = results[2]
+            sec = results[1]
+            if fir == functions["J"][0]:
+                inf = functions["J"][1]
+            else:
+                inf = functions["J"][0]
+            if sec == functions["P"][0]:
+                ish = functions["P"][1]
+            else:
+                ish = functions["P"][0]
+            func = [fir + "i", sec + "e", ish + "i", inf + "e"]
+    return func
+
+def calc_results(prefs):
+    results = [["", 0], ["", 0], ["", 0], ["", 0]]
+    for i in range(4):
+        if prefs[i][0] > prefs[i][1]:
+            results[i] = [letters[i][0], prefs[i][0]]
+        else:
+            results[i] = [letters[i][1], prefs[i][1]]
+    name = ""
+    for i in range(4):
+        name = name + results[i][0]
+    print("You are an " + name + "!\n")
+    print("The letters stand for " + acronym[results[0][0]] + ", " + acronym[results[1][0]] + ", " + acronym[results[2][0]] + ", and " + acronym[results[3][0]] + ".")
+    for i in range(4):
+        percent = str(round((results[i][1] / 9) * 100))
+        print("\n" + acronym[results[i][0]] + ": " + percent + "%\n")
+        print("   " + letter_decs[i][letters[i].index(results[i][0])] + "\n")
+    results = [results[0][0], results[1][0], results[2][0], results[3][0]]
+    return results
+
+def science_results(funcs):
+    for i in range(4):
+        trait = acronym[funcs[i][1].upper()] + " " + acronym[funcs[i][0]]
+        print("\n" + func_stack[i][0] + " Function: " + trait + " (" + funcs[i] + ")\n")
+        print("   " + func_stack[i][1])
+        print("   " + cog_funcs[funcs[i]] + "\n")
+
+def personality_test():
+    prefs = [[0, 0], [0, 0], [0, 0], [0, 0]]
+    print("MBTI Personality Test\n")
+    print("   For this quiz, you will be given the choice between two options. Type in the number for the one that you prefer or the one that fits you best. Be as honest as possible, or the results will not be accurate. It's best to go with your initial gut instinct.\n   There are four sections, and each will have its own descriptions to help you determine the best options for you.\n   You must enter your answer as either a 1 or 2.\n")
+    for i in range(4):
+        prefs = exec_section(i, prefs)
+    print("\n-------------------------------------------\n")
+    print("Results\n")
+    results = calc_results(prefs)
+    print("\n-------------------------------------------\n")
+    print("Scientific Results\n")
+    funcs = function_stack(results)
+    stack = ("-").join(funcs)
+    print("\nCognitive Functions: " + stack + "\n")
+    science_results(funcs)
+
+def personality_profile():
+    print("MBTI Personality Profile\n")
+    while True:
+        results = input("   Enter an MBTI personality type. The type must have 4 letters.\nAnswer: ").upper()
+        if len(results) == 4:
+            if (results[0] == "E" or results[0] == "I") and (results[1] == "N" or results[1] == "S") and (results[2] == "F" or results[2] == "T") and (results[3] == "J" or results[3] == "P"):
+                break
+        else:
+            print("The personality type must have exactly 4 letters.\n")
+    print("\n-------------------------------------------\n")
+    print("Results\n")
+    print("The letters stand for " + acronym[results[0]] + ", " + acronym[results[1]] + ", " + acronym[results[2]] + ", and " + acronym[results[3]] + ".")
+    for i in range(4):
+        print("\n" + acronym[results[i]] + "\n")
+        print("   " + letter_decs[i][letters[i].index(results[i])] + "\n")
+    print("\n-------------------------------------------\n")
+    print("Scientific Results\n")
+    funcs = function_stack(results)
+    stack = ("-").join(funcs)
+    print("\nCognitive Functions: " + stack + "\n")
+    science_results(funcs)
+
+while True:
+    choice = input("Would you like to take the personality test or view a personality profile? (enter TEST or PROFILE)\n").upper()
+    if choice == "TEST":
+        print("\n-------------------------------------------\n")
+        personality_test()
+    elif choice == "PROFILE":
+        print("\n-------------------------------------------\n")
+        personality_profile()
+    else:
+        print("You must enter either TEST or PROFILE.")
